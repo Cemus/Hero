@@ -1,4 +1,5 @@
-﻿using Hero.Shared.Models;
+﻿using Hero.API.Builders;
+using Hero.Shared.Models;
 
 namespace Hero.API.Factories
 {
@@ -10,7 +11,7 @@ namespace Hero.API.Factories
             {
                 Name = name,
                 Description = description,
-                Choices = new List<Choice>()
+                Choices = []
             };
         }
 
@@ -22,46 +23,29 @@ namespace Hero.API.Factories
 
         private static Choice CreateItemPickupChoice(Scene scene)
         {
-            var effectTypeAddItem = new EffectType { Name = "AddItem" };
-            var effectTypeGoToScene = new EffectType { Name = "GoToScene" };
-
-            var outcome = new Outcome
-            {
-                Label = "PickupSuccess",
-                Effects = new List<Effect>
-                {
-                    new Effect
-                    {
-                        EffectType = effectTypeAddItem,
-                        Value = 1
-                    },
-                    new Effect
-                    {
-                        EffectType = effectTypeGoToScene,
-                        Value = 1
-                    }
-                },
-                Conditions = new List<Condition>()
-            };
+            Outcome outcome = new OutcomeBuilder()
+                .SetLabel("PickUpRustedSword")
+                .AddEffect(EffectFactory.AddItem(1))
+                .Build();
 
             return new Choice
             {
                 Description = "Ramasser l'épée rouillée",
                 Scene = scene,
                 IsRepeatable = false,
-                Outcomes = new List<Outcome> { outcome }
+                Outcomes = [outcome]
             };
         }
 
         private static Choice CreateMountainChoice(Scene scene)
         {
-            var effectTypeGoToScene = new EffectType { Name = "GoToScene" };
-            var effectTypeLoseHP = new EffectType { Name = "LoseHP" };
-            var effectTypeHeal = new EffectType { Name = "Heal" };
+            EffectType effectTypeGoToScene = new() { Name = "GoToScene" };
+            EffectType effectTypeLoseHP = new() { Name = "LoseHP" };
+            EffectType effectTypeHeal = new() { Name = "Heal" };
 
-            var conditionTypeStrength = new ConditionType { Name = "TestStrengthAbove" };
+            ConditionType conditionTypeStrength = new() { Name = "TestStrengthAbove" };
 
-            var condition = new Condition
+            Condition condition = new()
             {
                 ConditionType = conditionTypeStrength,
                 Value = 4
@@ -70,15 +54,16 @@ namespace Hero.API.Factories
             var successOutcome = new Outcome
             {
                 Label = "Success",
-                Conditions = new List<Condition> { condition },
-                Effects = new List<Effect>
+                FeedBack = "Vous arpentez la montagne !",
+                Conditions = [condition],
+                Effects =
                 {
-                    new Effect
+                    new()
                     {
                         EffectType = effectTypeHeal,
                         Value = 10
                     },
-                    new Effect
+                    new()
                     {
                         EffectType = effectTypeGoToScene,
                         Value = 1
@@ -89,20 +74,19 @@ namespace Hero.API.Factories
             var failureOutcome = new Outcome
             {
                 Label = "Failure",
-                Conditions = new List<Condition>(),
-                Effects = new List<Effect>
-                {
-                    new Effect
-                    {
+                FeedBack = "Vous faîtes une crise d'asthme en essayant de gravir cet Everest...",
+                Conditions = [],
+                Effects =
+                [
+                    new() {
                         EffectType = effectTypeLoseHP,
                         Value = 5
                     },
-                    new Effect
-                    {
+                    new() {
                         EffectType = effectTypeGoToScene,
                         Value = 1
                     }
-                }
+                ]
             };
 
             return new Choice
@@ -110,7 +94,7 @@ namespace Hero.API.Factories
                 Description = "Partir vers la montagne",
                 Scene = scene,
                 IsRepeatable = true,
-                Outcomes = new List<Outcome> { successOutcome, failureOutcome }
+                Outcomes = [successOutcome, failureOutcome]
             };
         }
     }

@@ -37,8 +37,9 @@ namespace Hero.API.Services
                     var outcomeDto = new OutcomeDto
                     {
                         Label = outcome.Label,
-                        Conditions = new List<ConditionDto>(),
-                        Effects = new List<EffectDto>(),
+                        FeedBack = outcome.FeedBack,
+                        Conditions = [],
+                        Effects = []
                     };
 
                     foreach (var condition in outcome.Conditions)

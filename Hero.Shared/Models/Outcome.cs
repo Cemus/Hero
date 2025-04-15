@@ -7,6 +7,7 @@ namespace Hero.Shared.Models
     {
         public int Id { get; set; }
         public required string Label { get; set; }
+        public required string FeedBack { get; set; }
 
         public virtual ICollection<Condition> Conditions { get; set; } = new List<Condition>();
         public virtual ICollection<Effect> Effects { get; set; } = new List<Effect>();
