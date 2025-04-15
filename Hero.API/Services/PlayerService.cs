@@ -106,7 +106,13 @@ namespace Hero.API.Services
             };
 
             var player = new Player(playerInfos.Name, generatedStats, job);
+
+
             await _playerRepository.AddAsync(player);
+
+            generatedStats.PlayerId = player.Id;
+
+            await _playerRepository.SaveChangesAsync(player);
 
             return new PlayerDto
             {

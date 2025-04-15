@@ -5,15 +5,8 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "name":"Jean",
-    "stats":{
-      "strength": "10",
-      "vitality": "12",
-      "defense": "8",
-      "knowledge": "7",
-      "charisma": "9",
-      "dexterity": "11"
-    }
+    "name":"Warrior",
+    "jobname":"warrior"
 }
 ###
 

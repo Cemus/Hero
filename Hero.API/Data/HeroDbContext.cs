@@ -64,11 +64,13 @@ namespace Hero.API.Data
                 .HasForeignKey<Player>(p => p.StatsId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+
             modelBuilder.Entity<Player>()
                 .HasOne(p => p.Job)
                 .WithMany(j => j.Players)
                 .HasForeignKey(p => p.JobId)
                 .OnDelete(DeleteBehavior.Restrict);
+
 
             modelBuilder.Entity<Item>()
                 .HasOne(i => i.Stats)

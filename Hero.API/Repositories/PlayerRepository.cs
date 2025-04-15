@@ -34,5 +34,22 @@ namespace Hero.API.Repositories
             _context.Players.Remove(player);
             await _context.SaveChangesAsync();
         }
+
+        public async Task SaveChangesAsync(Player player)
+        {
+            var existingPlayer = await _context.Players
+                                               .FirstOrDefaultAsync(p => p.Id == player.Id);
+
+            if (existingPlayer == null)
+            {
+                throw new Exception("Player not found");
+            }
+
+            existingPlayer.Name = player.Name;
+            existingPlayer.JobId = player.JobId;
+            existingPlayer.StatsId = player.StatsId;
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

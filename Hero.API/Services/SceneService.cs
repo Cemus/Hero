@@ -20,7 +20,7 @@ namespace Hero.API.Services
                 Id = scene.Id,
                 Name = scene.Name,
                 Description = scene.Description,
-                Choices = new List<ChoiceDto>()
+                Choices = []
             };
 
             foreach (var choice in scene.Choices)
@@ -29,7 +29,7 @@ namespace Hero.API.Services
                 {
                     Id = choice.Id,
                     Description = choice.Description,
-                    Outcomes = new List<Outcome>()
+                    Outcomes = []
                 };
 
                 foreach (var outcome in choice.Outcomes)
