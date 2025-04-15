@@ -1,0 +1,34 @@
+﻿@inject HttpClient Http
+@using Hero.Shared.Dtos
+@page "/characters"
+
+<PageTitle>Personnages</PageTitle>
+
+<h1>Personnages</h1>
+<p>Base Address: @Http.BaseAddress</p>
+
+@if (players == null)
+{
+    <p><em>Chargement...</em></p>
+}
+else
+{
+    <ul>
+        @foreach (var player in players)
+        {
+            <li>
+                <NavLink class="nav-btn" href="/story">@player.Name <span>(@player.Job.Name)</span></NavLink>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private List<PlayerDto>? players;
+
+    protected override async Task OnInitializedAsync()
+    {
+        players = await Http.GetFromJsonAsync<List<PlayerDto>>("api/players");
+    }
+}
+

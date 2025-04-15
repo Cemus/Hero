@@ -1,0 +1,21 @@
+html, body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+#app > .page {
+    display: grid;
+    grid-template-columns:1fr;
+    grid-template-rows: auto 1fr auto;
+    min-height:100vh;
+}
+
+li {
+    list-style:none;
+}
+
+#blazor-error-ui{
+    display:none;
+}

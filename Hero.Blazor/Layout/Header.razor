@@ -1,0 +1,38 @@
+﻿<header class="d-flex align-items-center justify-content-between px-3 py-2 border-bottom mb-2">
+    <a href="" class="navbar-brand">JDVELH</a>
+    <nav>
+        <ul class="navbar d-flex gap-3 m-0">
+            <li class="nav-item">
+                <NavLink class="nav-link d-flex align-items-center gap-2" href="" Match="NavLinkMatch.All">
+                    <span class="bi bi-house-door-fill-nav-menu"></span>
+                    Home
+                </NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link d-flex align-items-center gap-2" href="counter">
+                    <span class="bi bi-plus-square-fill-nav-menu"></span>
+                    Counter
+                </NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link d-flex align-items-center gap-2" href="weather">
+                    <span class="bi bi-list-nested-nav-menu"></span>
+                    Weather
+                </NavLink>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}

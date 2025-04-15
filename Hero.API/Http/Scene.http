@@ -1,0 +1,18 @@
+# Créer les composants de base
+
+@Hero_HostAddress = http://localhost:5152
+
+#Scenes
+
+GET {{Hero_HostAddress}}/api/scene/
+Accept: application/json
+Content-Type: application/json
+
+
+###
+
+#Scene
+
+GET {{Hero_HostAddress}}/api/scenes/
+Accept: application/json
+Content-Type: application/json

@@ -1,0 +1,47 @@
+﻿@using Hero.Shared.Dtos
+@using System.Text.Json
+@inject HttpClient Http
+@page "/story"
+
+<PageTitle>Histoire</PageTitle>
+
+
+<h1>@scene?.Name</h1>
+
+<p>@scene?.Description</p>
+
+<ul>
+    @if (scene != null)
+    {
+        foreach (var choice in scene.Choices)
+        {
+            <li><button onclick="()=>HandleChoice(choice.Id)" class="btn bg-dark text-white my-2">@choice.Description</button></li>
+        }
+    }
+</ul>
+
+@code {
+    private SceneDto? scene;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            scene = await Http.GetFromJsonAsync<SceneDto>("api/scenes/3");
+            Console.WriteLine(JsonSerializer.Serialize(scene));
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[ERROR] {ex.Message}");
+        }
+    }
+    /*
+     * à faire
+     * async Task => choiceId vers un test serveur des conditions du choix
+     */
+    void HandleChoice(int choiceId)
+    {
+        Console.WriteLine(choiceId);
+
+    }
+}

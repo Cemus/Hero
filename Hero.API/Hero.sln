@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35919.96
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hero.API", "Hero.API.csproj", "{3E4E651B-1C47-1648-A18B-6DE15129D952}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hero.Blazor", "..\Hero.Blazor\Hero.Blazor.csproj", "{7C29D0CC-7213-4D06-A9A3-8F5E5A061E0D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hero.Shared", "..\Hero.Shared\Hero.Shared.csproj", "{32ABF136-633F-47D7-9023-0533E27CA29D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3E4E651B-1C47-1648-A18B-6DE15129D952}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E4E651B-1C47-1648-A18B-6DE15129D952}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E4E651B-1C47-1648-A18B-6DE15129D952}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E4E651B-1C47-1648-A18B-6DE15129D952}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C29D0CC-7213-4D06-A9A3-8F5E5A061E0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C29D0CC-7213-4D06-A9A3-8F5E5A061E0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C29D0CC-7213-4D06-A9A3-8F5E5A061E0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C29D0CC-7213-4D06-A9A3-8F5E5A061E0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32ABF136-633F-47D7-9023-0533E27CA29D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32ABF136-633F-47D7-9023-0533E27CA29D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32ABF136-633F-47D7-9023-0533E27CA29D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32ABF136-633F-47D7-9023-0533E27CA29D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B9A366D2-265B-4816-92B0-1437C5610427}
+	EndGlobalSection
+EndGlobal

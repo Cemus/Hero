@@ -1,0 +1,130 @@
+﻿using Hero.API.Repositories;
+using Hero.Shared.Dtos;
+using Hero.Shared.Models;
+
+namespace Hero.API.Services
+{
+    public class PlayerService
+    {
+        private readonly PlayerRepository _playerRepository;
+        private readonly JobRepository _jobRepository;
+
+        public PlayerService(PlayerRepository playerRepository, JobRepository jobRepository)
+        {
+            _playerRepository = playerRepository;
+            _jobRepository = jobRepository;
+        }
+
+        public async Task<IEnumerable<PlayerDto>> GetAllPlayersAsync()
+        {
+            var players = await _playerRepository.GetAllAsync();
+            foreach (var p in players)
+            {
+                Console.WriteLine($"Player: {p.Id}, Name: {p.Name}, Job: {p.Job?.Name ?? "null"}, StatsId: {p.Stats?.Id ?? 0}");
+            }
+            return players.Select(p =>
+
+            new PlayerDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Job = p.Job != null
+                ? new JobDto { Id = p.Job.Id, Name = p.Job.Name }
+                : new JobDto { Id = 0, Name = "Inconnu" },
+                Stats = p.Stats != null
+                ? new StatsDto
+                {
+                    Id = p.Stats.Id,
+                    Strength = p.Stats.Strength,
+                    Vitality = p.Stats.Vitality,
+                    Defense = p.Stats.Defense,
+                    Knowledge = p.Stats.Knowledge,
+                    Charisma = p.Stats.Charisma,
+                    Dexterity = p.Stats.Dexterity
+                }
+                : new StatsDto()
+            });
+
+        }
+
+
+        public async Task DeletePlayerAsync(int id)
+        {
+            Player? player = await _playerRepository.GetByIdAsync(id);
+
+            if (player == null)
+            {
+                throw new Exception("Player not found");
+            }
+
+            await _playerRepository.DeleteAsync(player);
+        }
+
+        public async Task<PlayerDto> GetPlayerByIdAsync(int id)
+        {
+            var player = await _playerRepository.GetByIdAsync(id);
+
+            if (player == null)
+            {
+                throw new Exception("Player not found");
+            }
+
+            return new PlayerDto
+            {
+                Id = player.Id,
+                Name = player.Name,
+                Job = new JobDto
+                { Id = player.Job.Id, Name = player.Job.Name },
+                Stats = new StatsDto
+                {
+                    Id = player.Stats?.Id ?? 0,
+                    Strength = player.Stats?.Strength ?? 0,
+                    Vitality = player.Stats?.Vitality ?? 0,
+                    Defense = player.Stats?.Defense ?? 0,
+                    Knowledge = player.Stats?.Knowledge ?? 0,
+                    Charisma = player.Stats?.Charisma ?? 0,
+                    Dexterity = player.Stats?.Dexterity ?? 0,
+                }
+            };
+        }
+
+        public async Task<PlayerDto> CreatePlayerAsync(CreatePlayerDto playerInfos)
+        {
+            var job = await _jobRepository.GetByNameAsync(playerInfos.JobName);
+
+            if (job == null)
+            {
+                throw new Exception("Job not found");
+            }
+
+            var generatedStats = job.Name switch
+            {
+                "warrior" => new Stats(5, 4, 3, 1, 1, 2),
+                "scholar" => new Stats(1, 2, 2, 5, 4, 1),
+                "thief" => new Stats(2, 2, 2, 2, 3, 5),
+                _ => new Stats()
+            };
+
+            var player = new Player(playerInfos.Name, generatedStats, job);
+            await _playerRepository.AddAsync(player);
+
+            return new PlayerDto
+            {
+                Id = player.Id,
+                Name = player.Name,
+                Job = new JobDto { Id = job.Id, Name = job.Name },
+                Stats = new StatsDto
+                {
+                    Id = player.Stats.Id,
+                    Strength = player.Stats.Strength,
+                    Vitality = player.Stats.Vitality,
+                    Defense = player.Stats.Defense,
+                    Knowledge = player.Stats.Knowledge,
+                    Charisma = player.Stats.Charisma,
+                    Dexterity = player.Stats.Dexterity
+                }
+            };
+        }
+
+    }
+}

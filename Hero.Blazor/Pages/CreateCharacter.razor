@@ -1,0 +1,74 @@
+﻿@using Hero.Shared.Dtos
+@using Microsoft.AspNetCore.Components.Forms
+@using System.ComponentModel.DataAnnotations
+@inject HttpClient Http
+@page "/create-character"
+
+<PageTitle>Créer un personnage</PageTitle>
+
+<h1>Nouveau personnage</h1>
+
+<EditForm Model="@characterModel" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <fieldset>
+        <legend>Choisissez un nom</legend>
+        <div>
+            <label for="name">Nom du personnage</label>
+            <InputText id="name" @bind-Value="characterModel.Name" maxlength="10" />
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Choisissez une classe</legend>
+        <label>Classe :</label>
+        <InputRadioGroup  @bind-Value="characterModel.Job" >
+        @foreach (var job in jobs)
+        {
+            <div>
+                <InputRadio TValue="string"  Value="@job" />
+                <label>@job</label>
+            </div>
+        }
+        </InputRadioGroup>
+    </fieldset>
+
+    <button type="submit">Créer @(characterModel.Name != "" ? characterModel.Name : "votre perso")</button>
+</EditForm>
+
+@code {
+    private CharacterFormModel characterModel = new();
+
+    private List<string> jobs = new() { "warrior", "scholar", "thief" };
+
+    public class CharacterFormModel
+    {
+        [Required(ErrorMessage = "Veuillez entrer un nom.")]
+        public string Name { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Veuillez choisir une classe.")]
+        public string? Job { get; set; }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        var player = new CreatePlayerDto
+        {
+            Name = characterModel.Name,
+            JobName = characterModel.Job ?? "???"
+        };
+
+        var response = await Http.PostAsJsonAsync("api/players", player);
+
+        if (response.IsSuccessStatusCode)
+        {
+            Console.WriteLine("Personnage créé !");
+            // TODO : redirection ou popup
+        }
+        else
+        {
+            Console.WriteLine("Erreur : " + response.ReasonPhrase);
+        }
+    }
+}

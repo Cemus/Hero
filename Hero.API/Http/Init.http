@@ -1,0 +1,14 @@
+# Créer les composants de base
+
+@Hero_HostAddress = http://localhost:5152
+
+#Jobs
+
+POST {{Hero_HostAddress}}/api/jobs/
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name":"thief"
+}
+###

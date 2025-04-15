@@ -1,0 +1,32 @@
+@Hero_HostAddress = http://localhost:5152
+
+POST {{Hero_HostAddress}}/api/players/
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name":"Jean",
+    "stats":{
+      "strength": "10",
+      "vitality": "12",
+      "defense": "8",
+      "knowledge": "7",
+      "charisma": "9",
+      "dexterity": "11"
+    }
+}
+###
+
+GET {{Hero_HostAddress}}/api/players/
+Accept: application/json
+
+###
+
+GET {{Hero_HostAddress}}/api/players/1
+Accept: application/json
+
+###
+
+
+DELETE {{Hero_HostAddress}}/api/players/1
+Accept: application/json
