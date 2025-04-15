@@ -17,8 +17,10 @@ namespace Hero.API.Factories
 
         public static void AddBasicChoices(Scene scene)
         {
+            List<Condition> conditions = [];
+
             scene.Choices.Add(CreateItemPickupChoice(scene));
-            scene.Choices.Add(CreateMountainChoice(scene));
+            scene.Choices.Add(CreateChangeLocationChoice(scene, conditions, 1));
         }
 
         private static Choice CreateItemPickupChoice(Scene scene)
@@ -37,37 +39,18 @@ namespace Hero.API.Factories
             };
         }
 
-        private static Choice CreateMountainChoice(Scene scene)
+
+        private static Choice CreateChangeLocationChoice(Scene scene, List<Condition> conditions, int newSceneId)
         {
-            EffectType effectTypeGoToScene = new() { Name = "GoToScene" };
-            EffectType effectTypeLoseHP = new() { Name = "LoseHP" };
-            EffectType effectTypeHeal = new() { Name = "Heal" };
-
-            ConditionType conditionTypeStrength = new() { Name = "TestStrengthAbove" };
-
-            Condition condition = new()
-            {
-                ConditionType = conditionTypeStrength,
-                Value = 4
-            };
 
             var successOutcome = new Outcome
             {
                 Label = "Success",
-                FeedBack = "Vous arpentez la montagne !",
-                Conditions = [condition],
+                FeedBack = "",
+                Conditions = conditions,
                 Effects =
                 {
-                    new()
-                    {
-                        EffectType = effectTypeHeal,
-                        Value = 10
-                    },
-                    new()
-                    {
-                        EffectType = effectTypeGoToScene,
-                        Value = 1
-                    }
+                    EffectFactory.GoToScene(newSceneId),
                 }
             };
 
@@ -78,14 +61,7 @@ namespace Hero.API.Factories
                 Conditions = [],
                 Effects =
                 [
-                    new() {
-                        EffectType = effectTypeLoseHP,
-                        Value = 5
-                    },
-                    new() {
-                        EffectType = effectTypeGoToScene,
-                        Value = 1
-                    }
+                    EffectFactory.LoseHP(5),
                 ]
             };
 
