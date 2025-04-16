@@ -1,4 +1,5 @@
 ﻿using Hero.API.Services;
+using Hero.Shared.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hero.API.Controllers
@@ -15,22 +16,26 @@ namespace Hero.API.Controllers
         }
 
 
-        /*[HttpPost("api/choices/{choiceId}")]
-        public async Task<IActionResult> PostChoice(int choiceId, [FromBody] ChoiceRequestDto request)
+        [HttpPost("api/choices/")]
+        public async Task<IActionResult> PostChoice([FromBody] ChoiceRequestDto request)
         {
-            var player = await _playerService.GetPlayerByIdAsync(request.CharacterId);
-            var choice = await _choiceService.GetByIdAsync(choiceId);
-
-            if (!choice.IsAvailableTo(player))
-                return BadRequest("Choice not allowed");
-
-            await _choiceService.ApplyChoiceEffectsAsync(player, choice);
-
-            return Ok(new ChoiceResultDto
+            try
             {
-                NextSceneId = choice.NextSceneId
-            });
-        }*/
+                PlayerDto player = await _playerService.GetPlayerByIdAsync(request.CharacterId);
+                ChoiceDto choice = await _choiceService.GetChoiceByIdAsync(request.ChoiceId);
+
+
+                ChoiceResultDto choiceResult = await _choiceService.ApplyChoiceAsync(player, choice);
+
+                return Ok(choiceResult);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+
+        }
 
     }
 }

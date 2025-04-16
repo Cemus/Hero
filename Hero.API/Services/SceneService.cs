@@ -29,6 +29,7 @@ namespace Hero.API.Services
                 {
                     Id = choice.Id,
                     Description = choice.Description,
+                    IsRepeatable = choice.IsRepeatable,
                     Outcomes = []
                 };
 
@@ -49,7 +50,8 @@ namespace Hero.API.Services
                             ConditionType = new ConditionTypeDto
                             {
                                 Name = condition.ConditionType.Name
-                            }
+                            },
+                            Value = condition.Value,
                         };
                         outcomeDto.Conditions.Add(conditionDto);
                     }
