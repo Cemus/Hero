@@ -18,6 +18,8 @@ namespace Hero.API.Data
         public DbSet<Player> Players => Set<Player>();
         public DbSet<Job> Jobs => Set<Job>();
         public DbSet<Stats> Stats => Set<Stats>();
+        public DbSet<PlayerChoiceHistory> PlayerChoicesHistories => Set<PlayerChoiceHistory>();
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -71,6 +73,17 @@ namespace Hero.API.Data
                 .HasForeignKey(p => p.JobId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<PlayerChoiceHistory>()
+                .HasOne(ph => ph.Player)
+                .WithMany()
+                .HasForeignKey(ph => ph.PlayerId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<PlayerChoiceHistory>()
+                .HasOne(ph => ph.Choice)
+                .WithMany()
+                .HasForeignKey(ph => ph.ChoiceId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Item>()
                 .HasOne(i => i.Stats)

@@ -13,12 +13,12 @@ namespace Hero.API.Controllers
             _playerService = playerService;
             _choiceService = choiceService;
         }
-        /*
 
-        [HttpPost("api/choices/{choiceId}")]
+
+        /*[HttpPost("api/choices/{choiceId}")]
         public async Task<IActionResult> PostChoice(int choiceId, [FromBody] ChoiceRequestDto request)
         {
-            var player = await _playerService.GetPlayerByIdAsync(request.UserId);
+            var player = await _playerService.GetPlayerByIdAsync(request.CharacterId);
             var choice = await _choiceService.GetByIdAsync(choiceId);
 
             if (!choice.IsAvailableTo(player))
@@ -30,7 +30,7 @@ namespace Hero.API.Controllers
             {
                 NextSceneId = choice.NextSceneId
             });
-        }
-        */
+        }*/
+
     }
 }
