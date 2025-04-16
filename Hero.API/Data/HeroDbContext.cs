@@ -94,6 +94,12 @@ namespace Hero.API.Data
             modelBuilder.Entity<Player>()
                 .HasMany(p => p.Items)
                 .WithMany(i => i.Players);
+
+            modelBuilder.Entity<Player>()
+                .HasOne(p => p.Scene)
+                .WithMany(s => s.Players)
+                .HasForeignKey(p => p.SceneId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
