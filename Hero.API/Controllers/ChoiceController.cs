@@ -6,12 +6,10 @@ namespace Hero.API.Controllers
 {
     public class ChoiceController : ControllerBase
     {
-        private readonly PlayerService _playerService;
         private readonly ChoiceService _choiceService;
 
-        public ChoiceController(PlayerService playerService, ChoiceService choiceService)
+        public ChoiceController(ChoiceService choiceService)
         {
-            _playerService = playerService;
             _choiceService = choiceService;
         }
 

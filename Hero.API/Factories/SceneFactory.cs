@@ -27,6 +27,7 @@ namespace Hero.API.Factories
         {
             Outcome outcome = new OutcomeBuilder()
                 .SetLabel("PickUpRustedSword")
+                .SetFeedBack("Vous ramassez l'épée rouillée !")
                 .AddEffect(EffectFactory.AddItem(1))
                 .Build();
 
