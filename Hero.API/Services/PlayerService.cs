@@ -28,6 +28,7 @@ namespace Hero.API.Services
             {
                 Id = p.Id,
                 Name = p.Name,
+                SceneId = p.SceneId,
                 Job = p.Job != null
                 ? new JobDto { Id = p.Job.Id, Name = p.Job.Name }
                 : new JobDto { Id = 0, Name = "Inconnu" },
@@ -73,6 +74,7 @@ namespace Hero.API.Services
             {
                 Id = player.Id,
                 Name = player.Name,
+                SceneId = player.SceneId,
                 Job = new JobDto
                 { Id = player.Job.Id, Name = player.Job.Name },
                 Stats = new StatsDto
@@ -118,6 +120,7 @@ namespace Hero.API.Services
             {
                 Id = player.Id,
                 Name = player.Name,
+                SceneId = player.SceneId,
                 Job = new JobDto { Id = job.Id, Name = job.Name },
                 Stats = new StatsDto
                 {
