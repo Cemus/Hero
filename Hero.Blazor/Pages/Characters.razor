@@ -1,4 +1,5 @@
 ﻿@inject HttpClient Http
+@inject Services.PlayerStateService PlayerState
 @using Hero.Shared.Dtos
 @page "/characters"
 
@@ -17,7 +18,8 @@ else
         @foreach (var player in players)
         {
             <li>
-                <NavLink class="nav-btn" href="/story">@player.Name <span>(@player.Job.Name)</span></NavLink>
+                <NavLink
+                @onclick="()=>UpdatePlayerState(player)" class="nav-btn" href="/story">@player.Name <span>(@player.Job.Name)</span></NavLink>
             </li>
         }
     </ul>
@@ -29,6 +31,11 @@ else
     protected override async Task OnInitializedAsync()
     {
         players = await Http.GetFromJsonAsync<List<PlayerDto>>("api/players");
+    }
+
+    protected void UpdatePlayerState(PlayerDto player)
+    {
+        PlayerState.SetPlayer(player);
     }
 }
 

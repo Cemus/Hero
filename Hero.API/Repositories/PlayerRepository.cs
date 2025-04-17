@@ -47,7 +47,7 @@ namespace Hero.API.Repositories
             existingPlayer.Name = player.Name;
             existingPlayer.JobId = player.JobId;
             existingPlayer.StatsId = player.StatsId;
-            existingPlayer.Scene = await _context.Scenes.FirstOrDefaultAsync(s => s.Id == player.Id);
+            existingPlayer.Scene = player.Scene;
 
             await _context.SaveChangesAsync();
         }
@@ -60,6 +60,7 @@ namespace Hero.API.Repositories
                 throw new Exception("Player not found");
 
             var item = await _context.Items.FindAsync(itemId);
+
             if (item == null)
                 throw new Exception("Item not found");
 
@@ -87,13 +88,17 @@ namespace Hero.API.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task SetCurrentSceneAsync(Player player, int value)
+        public async Task SetCurrentSceneAsync(Player player, int sceneId)
         {
-            if (player == null)
+            Console.WriteLine("CHANGEMENT DE SCENE");
+            var existingPlayer = await _context.Players.FirstOrDefaultAsync(p => p.Id == player.Id);
+
+            if (existingPlayer == null)
                 throw new Exception("Player not found");
 
+            Console.WriteLine($"ANCIENNE SCENE : {existingPlayer.SceneId} NOUVELLE SCENE : {sceneId}");
+            existingPlayer.SceneId = sceneId;
 
-            player.SceneId = value;
             await _context.SaveChangesAsync();
         }
     }

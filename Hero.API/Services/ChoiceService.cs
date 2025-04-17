@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using Hero.API.Repositories;
+﻿using Hero.API.Repositories;
 using Hero.Shared.Dtos;
 using Hero.Shared.Models;
 
@@ -105,7 +104,6 @@ namespace Hero.API.Services
                         await ApplyEffect(effect, player);
                     }
                     Console.WriteLine(outcome);
-                    Console.WriteLine(JsonSerializer.Serialize(outcome));
                     return outcome.FeedBack;
                 }
             }

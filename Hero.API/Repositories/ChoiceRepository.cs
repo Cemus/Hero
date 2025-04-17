@@ -14,7 +14,14 @@ namespace Hero.API.Repositories
 
         public async Task<Choice?> GetByIdAsync(int id)
         {
-            return await _context.Choices.Include(c => c.Outcomes).FirstOrDefaultAsync(c => c.Id == id);
+            return await _context.Choices
+                .Include(c => c.Outcomes)
+                    .ThenInclude(o => o.Effects)
+                        .ThenInclude(e => e.EffectType)
+                 .Include(c => c.Outcomes)
+                    .ThenInclude(o => o.Conditions)
+                        .ThenInclude(cond => cond.ConditionType)
+                .FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<bool> IsChoicePresentInHistory(int playerId, int choiceId)
