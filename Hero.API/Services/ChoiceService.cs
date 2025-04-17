@@ -64,20 +64,20 @@ namespace Hero.API.Services
 
 
 
-        public async Task<ChoiceResultDto> ApplyChoiceAsync(PlayerDto player, ChoiceDto choice)
+        public async Task<ChoiceResultDto> ApplyChoiceAsync(int playerId, int choiceId)
         {
+            Player? player = await _playerRepository.GetByIdAsync(playerId);
+            Choice? choice = await _choiceRepository.GetByIdAsync(choiceId);
+
+            if (player == null || choice == null)
+            {
+                throw new Exception("Player or Choice not found during the record in history");
+            }
+
             if (choice.IsRepeatable || await _choiceRepository.IsChoicePresentInHistory(player.Id, choice.Id))
             {
 
-                Choice? currentChoice = await _choiceRepository.GetByIdAsync(choice.Id);
-                Player? currentPlayer = await _playerRepository.GetByIdAsync(player.Id);
-
-                if (currentChoice == null || currentPlayer == null)
-                {
-                    throw new Exception("Player or Choice not found during the record in history");
-                }
-
-                await _choiceRepository.AddChoiceToHistory(currentChoice, currentPlayer);
+                await _choiceRepository.AddChoiceToHistory(choice, player);
 
                 await TestOutcomes(choice.Outcomes, player);
 
@@ -86,7 +86,7 @@ namespace Hero.API.Services
             throw new Exception("Invalid choice");
         }
 
-        public async Task<ChoiceResultDto?> TestOutcomes(ICollection<OutcomeDto> outcomes, PlayerDto player)
+        public async Task<ChoiceResultDto?> TestOutcomes(ICollection<Outcome> outcomes, Player player)
         {
             foreach (var outcome in outcomes)
             {
@@ -108,7 +108,7 @@ namespace Hero.API.Services
 
         }
 
-        public bool TestCondition(ConditionDto condition, PlayerDto player)
+        public bool TestCondition(Condition condition, Player player)
         {
             bool validCondition = true;
 
@@ -163,24 +163,24 @@ namespace Hero.API.Services
             return validCondition;
         }
 
-        public async Task ApplyEffect(EffectDto effect, PlayerDto player)
+        public async Task ApplyEffect(Effect effect, Player player)
         {
             switch (effect.EffectType.Name)
             {
                 case "AddItem":
-                    await _playerRepository.AddItemToInventoryAsync(player.Id, effect.Value!.Value);
+                    await _playerRepository.AddItemToInventoryAsync(player, effect.Value!.Value);
                     break;
 
                 case "LoseHP":
-                    await _playerRepository.LoseHPAsync(player.Id, effect.Value!.Value);
+                    await _playerRepository.LoseHPAsync(player, effect.Value!.Value);
                     break;
 
                 case "Heal":
-                    await _playerRepository.HealAsync(player.Id, effect.Value!.Value);
+                    await _playerRepository.HealAsync(player, effect.Value!.Value);
                     break;
 
                 case "GoToScene":
-                    await _playerRepository.SetCurrentSceneAsync(player.Id, effect.Value!.Value);
+                    await _playerRepository.SetCurrentSceneAsync(player, effect.Value!.Value);
                     break;
 
                 default:

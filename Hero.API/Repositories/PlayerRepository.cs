@@ -53,11 +53,8 @@ namespace Hero.API.Repositories
 
         // Effects
 
-        public async Task AddItemToInventoryAsync(int playerId, int itemId)
+        public async Task AddItemToInventoryAsync(Player player, int itemId)
         {
-            var player = await GetByIdAsync(playerId);
-
-
             if (player == null)
                 throw new Exception("Player not found");
 
@@ -70,22 +67,17 @@ namespace Hero.API.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task LoseHPAsync(int playerId, int value)
+        public async Task LoseHPAsync(Player player, int value)
         {
-            var player = await GetByIdAsync(playerId);
-
             if (player == null)
                 throw new Exception("Player not found");
-
 
             player.Stats.Vitality = Math.Max(0, player.Stats.Vitality - value);
             await _context.SaveChangesAsync();
         }
 
-        public async Task HealAsync(int playerId, int value)
+        public async Task HealAsync(Player player, int value)
         {
-            var player = await GetByIdAsync(playerId);
-
             if (player == null)
                 throw new Exception("Player not found");
 
@@ -94,10 +86,8 @@ namespace Hero.API.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task SetCurrentSceneAsync(int playerId, int value)
+        public async Task SetCurrentSceneAsync(Player player, int value)
         {
-            var player = await GetByIdAsync(playerId);
-
             if (player == null)
                 throw new Exception("Player not found");
 

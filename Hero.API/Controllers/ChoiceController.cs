@@ -21,11 +21,7 @@ namespace Hero.API.Controllers
         {
             try
             {
-                PlayerDto player = await _playerService.GetPlayerByIdAsync(request.CharacterId);
-                ChoiceDto choice = await _choiceService.GetChoiceByIdAsync(request.ChoiceId);
-
-
-                ChoiceResultDto choiceResult = await _choiceService.ApplyChoiceAsync(player, choice);
+                ChoiceResultDto choiceResult = await _choiceService.ApplyChoiceAsync(request.PlayerId, request.ChoiceId);
 
                 return Ok(choiceResult);
             }
