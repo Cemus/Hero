@@ -1,4 +1,5 @@
-﻿using Hero.API.Repositories;
+﻿using System.Text.Json;
+using Hero.API.Repositories;
 using Hero.Shared.Dtos;
 using Hero.Shared.Models;
 
@@ -74,19 +75,19 @@ namespace Hero.API.Services
                 throw new Exception("Player or Choice not found during the record in history");
             }
 
-            if (choice.IsRepeatable || await _choiceRepository.IsChoicePresentInHistory(player.Id, choice.Id))
+            if (choice.IsRepeatable || !(await _choiceRepository.IsChoicePresentInHistory(player.Id, choice.Id)))
             {
 
                 await _choiceRepository.AddChoiceToHistory(choice, player);
 
-                await TestOutcomes(choice.Outcomes, player);
+                var feedBack = await TestOutcomes(choice.Outcomes, player);
 
-                return new ChoiceResultDto() { FeedBack = "Nothing..." };
+                return new ChoiceResultDto() { FeedBack = feedBack };
             }
-            throw new Exception("Invalid choice");
+            throw new Exception("You can't repeat this choice");
         }
 
-        public async Task<ChoiceResultDto?> TestOutcomes(ICollection<Outcome> outcomes, Player player)
+        public async Task<string> TestOutcomes(ICollection<Outcome> outcomes, Player player)
         {
             foreach (var outcome in outcomes)
             {
@@ -103,10 +104,12 @@ namespace Hero.API.Services
                     {
                         await ApplyEffect(effect, player);
                     }
-                    return new ChoiceResultDto() { FeedBack = outcome.FeedBack };
+                    Console.WriteLine(outcome);
+                    Console.WriteLine(JsonSerializer.Serialize(outcome));
+                    return outcome.FeedBack;
                 }
             }
-            return new ChoiceResultDto() { FeedBack = "Aucun effet n'a pu être appliqué." };
+            return "Aucun effet n'a pu être appliqué.";
         }
 
         public bool TestCondition(Condition condition, Player player)
