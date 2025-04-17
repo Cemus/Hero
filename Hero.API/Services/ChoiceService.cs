@@ -91,10 +91,12 @@ namespace Hero.API.Services
             foreach (var outcome in outcomes)
             {
                 bool conditionsValid = true;
+
                 foreach (var condition in outcome.Conditions)
                 {
                     conditionsValid = TestCondition(condition, player);
                 }
+
                 if (conditionsValid)
                 {
                     foreach (var effect in outcome.Effects)
@@ -105,7 +107,6 @@ namespace Hero.API.Services
                 }
             }
             return new ChoiceResultDto() { FeedBack = "Aucun effet n'a pu être appliqué." };
-
         }
 
         public bool TestCondition(Condition condition, Player player)

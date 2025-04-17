@@ -28,7 +28,6 @@ namespace Hero.API.Seeders
                                 {
                                     context.Scenes.Add(new Scene
                                     {
-                                        Id = (int)targetSceneId,
                                         Name = $"scene_{targetSceneId}",
                                         Description = $"[placeholder...] Scène #{targetSceneId}"
                                     });
