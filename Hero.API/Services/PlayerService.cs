@@ -43,21 +43,33 @@ namespace Hero.API.Services
                     Charisma = p.Stats.Charisma,
                     Dexterity = p.Stats.Dexterity
                 }
-                : new StatsDto()
+                : new StatsDto(),
+                Items = [.. p.Items.Select(i => new ItemDto
+                {
+                    Id = i.Id,
+                    Name = i.Name,
+                    Type = i.Type,
+                    Description = i.Description,
+                    Stats = i.Stats != null ? new StatsDto
+                    {
+                        Id = i.Stats.Id,
+                        Strength = i.Stats.Strength,
+                        Charisma = i.Stats.Charisma,
+                        Defense = i.Stats.Defense,
+                        Knowledge = i.Stats.Knowledge,
+                        Dexterity = i.Stats.Dexterity,
+                        Vitality = i.Stats.Dexterity
+                    } : null
+                })]
             });
+
 
         }
 
 
         public async Task DeletePlayerAsync(int id)
         {
-            Player? player = await _playerRepository.GetByIdAsync(id);
-
-            if (player == null)
-            {
-                throw new Exception("Player not found");
-            }
-
+            Player? player = await _playerRepository.GetByIdAsync(id) ?? throw new Exception("Player not found");
             await _playerRepository.DeleteAsync(player);
         }
 
@@ -65,29 +77,44 @@ namespace Hero.API.Services
         {
             var player = await _playerRepository.GetByIdAsync(id);
 
-            if (player == null)
-            {
-                throw new Exception("Player not found");
-            }
-
-            return new PlayerDto
-            {
-                Id = player.Id,
-                Name = player.Name,
-                SceneId = player.SceneId,
-                Job = new JobDto
-                { Id = player.Job.Id, Name = player.Job.Name },
-                Stats = new StatsDto
+            return player == null
+                ? throw new Exception("Player not found")
+                : new PlayerDto
                 {
-                    Id = player.Stats?.Id ?? 0,
-                    Strength = player.Stats?.Strength ?? 0,
-                    Vitality = player.Stats?.Vitality ?? 0,
-                    Defense = player.Stats?.Defense ?? 0,
-                    Knowledge = player.Stats?.Knowledge ?? 0,
-                    Charisma = player.Stats?.Charisma ?? 0,
-                    Dexterity = player.Stats?.Dexterity ?? 0,
-                }
-            };
+                    Id = player.Id,
+                    Name = player.Name,
+                    SceneId = player.SceneId,
+                    Job = new JobDto
+                    { Id = player.Job.Id, Name = player.Job.Name },
+                    Stats = new StatsDto
+                    {
+                        Id = player.Stats?.Id ?? 0,
+                        Strength = player.Stats?.Strength ?? 0,
+                        Vitality = player.Stats?.Vitality ?? 0,
+                        Defense = player.Stats?.Defense ?? 0,
+                        Knowledge = player.Stats?.Knowledge ?? 0,
+                        Charisma = player.Stats?.Charisma ?? 0,
+                        Dexterity = player.Stats?.Dexterity ?? 0,
+
+                    },
+                    Items = [.. player.Items.Select(i => new ItemDto
+                {
+                    Id = i.Id,
+                    Name = i.Name,
+                    Type = i.Type,
+                    Description = i.Description,
+                    Stats = i.Stats != null ? new StatsDto
+                    {
+                        Id = i.Stats.Id,
+                        Strength = i.Stats.Strength,
+                        Charisma = i.Stats.Charisma,
+                        Defense = i.Stats.Defense,
+                        Knowledge = i.Stats.Knowledge,
+                        Dexterity = i.Stats.Dexterity,
+                        Vitality = i.Stats.Dexterity
+                    } : null
+                })]
+                };
         }
 
         public async Task<PlayerDto> CreatePlayerAsync(CreatePlayerDto playerInfos)
@@ -131,7 +158,24 @@ namespace Hero.API.Services
                     Knowledge = player.Stats.Knowledge,
                     Charisma = player.Stats.Charisma,
                     Dexterity = player.Stats.Dexterity
-                }
+                },
+                Items = [.. player.Items.Select(i => new ItemDto
+                {
+                    Id = i.Id,
+                    Name = i.Name,
+                    Type = i.Type,
+                    Description = i.Description,
+                    Stats = i.Stats != null ? new StatsDto
+                    {
+                        Id = i.Stats.Id,
+                        Strength = i.Stats.Strength,
+                        Charisma = i.Stats.Charisma,
+                        Defense = i.Stats.Defense,
+                        Knowledge = i.Stats.Knowledge,
+                        Dexterity = i.Stats.Dexterity,
+                        Vitality = i.Stats.Dexterity
+                    } : null
+                })]
             };
         }
 

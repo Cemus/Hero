@@ -35,6 +35,8 @@
         {
             var character = PlayerState.CurrentPlayer;
 
+            Logger.LogInformation(JsonSerializer.Serialize(character));
+
             if (character == null)
             {
                 throw new Exception("Personnage non trouvé");

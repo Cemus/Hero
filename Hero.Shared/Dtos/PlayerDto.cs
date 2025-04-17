@@ -9,5 +9,6 @@
         public required int SceneId { get; set; }
         public required JobDto Job { get; set; }
         public required StatsDto Stats { get; set; }
+        public required ICollection<ItemDto> Items { get; set; } = [];
     }
 }
