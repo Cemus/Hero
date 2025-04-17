@@ -1,6 +1,7 @@
 ﻿@using Hero.Shared.Dtos
 @using Microsoft.AspNetCore.Components.Forms
 @using System.ComponentModel.DataAnnotations
+@inject NavigationManager NavigationManager
 @inject HttpClient Http
 @page "/create-character"
 
@@ -56,7 +57,7 @@
         var player = new CreatePlayerDto
         {
             Name = characterModel.Name,
-            JobName = characterModel.Job ?? "???"
+            JobName = characterModel.Job ?? "???",
         };
 
         var response = await Http.PostAsJsonAsync("api/players", player);
@@ -64,7 +65,7 @@
         if (response.IsSuccessStatusCode)
         {
             Console.WriteLine("Personnage créé !");
-            // TODO : redirection ou popup
+            NavigationManager.NavigateTo("characters");
         }
         else
         {

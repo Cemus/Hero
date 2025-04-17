@@ -10,5 +10,6 @@ namespace Hero.Shared.Models
         public required string Description { get; set; }
 
         public virtual ICollection<Choice> Choices { get; set; } = new List<Choice>();
+        public virtual ICollection<Player> Players { get; set; } = new List<Player>();
     }
 }

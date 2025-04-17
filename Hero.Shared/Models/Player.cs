@@ -15,6 +15,10 @@ namespace Hero.Shared.Models
         public required int StatsId { get; set; }
         public virtual required Stats Stats { get; set; }
         public virtual ICollection<Item> Items { get; set; } = new List<Item>();
+
+        public int SceneId { get; set; } = 7;
+        public virtual Scene? Scene { get; set; }
+
         public Player() { }
 
         [SetsRequiredMembers]
