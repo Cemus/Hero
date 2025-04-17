@@ -15,12 +15,20 @@ namespace Hero.API.Repositories
 
         public async Task<IEnumerable<Player>> GetAllAsync()
         {
-            return await _context.Players.Include(p => p.Stats).Include(p => p.Job).Include(p => p.Items).ToListAsync();
+            return await _context.Players
+                .Include(p => p.Stats)
+                .Include(p => p.Job)
+                .Include(p => p.Items)
+                .ToListAsync();
         }
 
         public async Task<Player?> GetByIdAsync(int id)
         {
-            return await _context.Players.Include(p => p.Stats).Include(p => p.Job).Include(p => p.Items).SingleOrDefaultAsync(p => p.Id == id);
+            return await _context.Players
+                .Include(p => p.Stats)
+                .Include(p => p.Job)
+                .Include(p => p.Items)
+                .SingleOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task AddAsync(Player player)
@@ -37,12 +45,8 @@ namespace Hero.API.Repositories
 
         public async Task SaveChangesAsync(Player player)
         {
-            var existingPlayer = await _context.Players.FirstOrDefaultAsync(p => p.Id == player.Id);
-
-            if (existingPlayer == null)
-            {
+            var existingPlayer = await _context.Players.FirstOrDefaultAsync(p => p.Id == player.Id) ??
                 throw new Exception("Player not found");
-            }
 
             existingPlayer.Name = player.Name;
             existingPlayer.JobId = player.JobId;
@@ -59,11 +63,8 @@ namespace Hero.API.Repositories
             if (player == null)
                 throw new Exception("Player not found");
 
-            var item = await _context.Items.FindAsync(itemId);
-
-            if (item == null)
+            var item = await _context.Items.FindAsync(itemId) ??
                 throw new Exception("Item not found");
-
 
             player.Items.Add(item);
             await _context.SaveChangesAsync();
@@ -90,13 +91,9 @@ namespace Hero.API.Repositories
 
         public async Task SetCurrentSceneAsync(Player player, int sceneId)
         {
-            Console.WriteLine("CHANGEMENT DE SCENE");
-            var existingPlayer = await _context.Players.FirstOrDefaultAsync(p => p.Id == player.Id);
-
-            if (existingPlayer == null)
+            var existingPlayer = await _context.Players.FirstOrDefaultAsync(p => p.Id == player.Id) ??
                 throw new Exception("Player not found");
 
-            Console.WriteLine($"ANCIENNE SCENE : {existingPlayer.SceneId} NOUVELLE SCENE : {sceneId}");
             existingPlayer.SceneId = sceneId;
 
             await _context.SaveChangesAsync();
