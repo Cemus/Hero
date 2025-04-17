@@ -47,6 +47,7 @@ namespace Hero.API.Repositories
             existingPlayer.Name = player.Name;
             existingPlayer.JobId = player.JobId;
             existingPlayer.StatsId = player.StatsId;
+            existingPlayer.Scene = await _context.Scenes.FirstOrDefaultAsync(s => s.Id == player.Id);
 
             await _context.SaveChangesAsync();
         }
