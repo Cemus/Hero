@@ -1,3 +1,4 @@
+using FluentValidation;
 using Hero.API.Data;
 using Hero.API.Seeders;
 using Microsoft.EntityFrameworkCore;
@@ -6,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<HeroDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("HeroConnection"), sqlServerOptions => sqlServerOptions.EnableRetryOnFailure()));
 
-builder.Services.AddControllers();
+
 builder.Services.Scan(scan => scan
     .FromAssemblyOf<Program>()
         .AddClasses(classes => classes.Where(c => c.Name.EndsWith("Service")))
@@ -15,7 +16,10 @@ builder.Services.Scan(scan => scan
         .AddClasses(classes => classes.Where(c => c.Name.EndsWith("Repository")))
             .AsSelf()
             .WithScopedLifetime()
-);
+        .AddClasses(classes => classes.AssignableTo(typeof(IValidator<>)))
+        .AsImplementedInterfaces()
+        .WithScopedLifetime());
+
 
 
 builder.Services.AddCors(options =>
@@ -27,6 +31,7 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader();
     });
 });
+
 
 var app = builder.Build();
 
