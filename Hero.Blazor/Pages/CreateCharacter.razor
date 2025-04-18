@@ -1,4 +1,5 @@
-﻿@using Hero.Shared.Dtos
+﻿@using Hero.Blazor.FormModels
+@using Hero.Shared.Dtos
 @using Microsoft.AspNetCore.Components.Forms
 @using System.ComponentModel.DataAnnotations
 @inject NavigationManager NavigationManager
@@ -48,15 +49,6 @@
     private string error = string.Empty;
 
     private List<string> jobs = new() { "warrior", "scholar", "thief" };
-
-    public class CharacterFormModel
-    {
-        [Required(ErrorMessage = "Veuillez entrer un nom.")]
-        public string Name { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Veuillez choisir une classe.")]
-        public string? Job { get; set; }
-    }
 
     private async Task HandleValidSubmit()
     {

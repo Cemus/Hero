@@ -1,0 +1,37 @@
+﻿@page "/scene-editor"
+@using System.ComponentModel.DataAnnotations
+@using Hero.Blazor.FormModels
+
+<PageTitle>Editeur de scène</PageTitle>
+
+<h1>Les scenes</h1>
+
+<EditForm Model="@sceneFormModel">
+	<div>
+		<label id="sceneName">Nom de la scène</label>
+		<InputText id="sceneName" @bind-Value="@sceneName"></InputText>
+	</div>
+	<div>
+		<label id="sceneDescription">Description de la scène</label>
+		<InputTextArea id="sceneDescription" @bind-Value="@sceneDescription"></InputTextArea>
+	</div>
+
+	<div>
+		<label id="choices">Choix</label>	
+		@foreach (var choice in sceneChoices )
+		{
+			<InputSelect id="choices" @bind-Value="@sceneChoice">
+				<option value="choice">@choice</option>
+			</InputSelect>
+		}
+	</div>
+
+</EditForm>
+
+@code {
+	SceneFormModel sceneFormModel = new();
+	string sceneName = string.Empty;
+	string sceneDescription = string.Empty;
+	List<string> sceneChoices = ["Test", "treasure"];
+	string sceneChoice = string.Empty;
+}
