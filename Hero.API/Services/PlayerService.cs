@@ -62,8 +62,6 @@ namespace Hero.API.Services
                     } : null
                 })]
             });
-
-
         }
 
 
