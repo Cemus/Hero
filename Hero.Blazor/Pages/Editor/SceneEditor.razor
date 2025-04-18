@@ -1,0 +1,34 @@
+﻿@page "/scene-editor"
+@inject HttpClient Http
+@using Hero.Blazor.FormModels
+@using Hero.Shared.Dtos
+
+<PageTitle>Éditeur de scène</PageTitle>
+
+<h1>Éditeur de scènes</h1>
+
+<h3>Choisissez une scène à modifier</h3>
+
+<ul class="d-flex flex-column gap-2">
+	@if (availableScenes.Count == 0)
+	{
+		<li>Chargement...</li>
+	}
+	@foreach (var scene in availableScenes)
+	{
+		<li>
+			<NavLink class="btn btn-primary" href=@($"scene-editor/{scene.Id}")>@scene.Name</NavLink>
+		</li>
+	}
+</ul>
+
+<NavLink class="btn btn-primary" href="scene-editor/new">Ajouter une nouvelle scène</NavLink>
+
+@code {
+	private List<SceneDto> availableScenes =   [];
+
+	protected override async Task OnInitializedAsync()
+	{
+		availableScenes = await Http.GetFromJsonAsync<List<SceneDto>>("api/scenes") ?? new();
+	}
+}

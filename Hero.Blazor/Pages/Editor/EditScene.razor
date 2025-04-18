@@ -1,0 +1,20 @@
+﻿@page "/scene-editor/{Id:int}"
+@inject HttpClient Http
+@using Hero.Blazor.FormModels
+@using Hero.Shared.Dtos
+
+<PageTitle>Éditeur de scène | Editer</PageTitle>
+
+<h1>Editer une scène</h1>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    SceneDto? scene = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        scene = await Http.GetFromJsonAsync<SceneDto>($"api/scenes/{Id}");
+    }
+}
