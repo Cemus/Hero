@@ -13,6 +13,11 @@
     <DataAnnotationsValidator />
     <ValidationSummary />
 
+    @if (!string.IsNullOrEmpty(error))
+    {
+        <p class=" alert-danger">@error</p>
+
+    }
     <fieldset>
         <legend>Choisissez un nom</legend>
         <div>
@@ -25,13 +30,13 @@
         <legend>Choisissez une classe</legend>
         <label>Classe :</label>
         <InputRadioGroup  @bind-Value="characterModel.Job" >
-        @foreach (var job in jobs)
-        {
-            <div>
-                <InputRadio TValue="string"  Value="@job" />
-                <label>@job</label>
-            </div>
-        }
+            @foreach (var job in jobs)
+            {
+                <div>
+                    <InputRadio TValue="string"  Value="@job" />
+                    <label>@job</label>
+                </div>
+            }
         </InputRadioGroup>
     </fieldset>
 
@@ -40,6 +45,7 @@
 
 @code {
     private CharacterFormModel characterModel = new();
+    private string error = string.Empty;
 
     private List<string> jobs = new() { "warrior", "scholar", "thief" };
 
@@ -64,12 +70,12 @@
 
         if (response.IsSuccessStatusCode)
         {
-            Console.WriteLine("Personnage créé !");
+            error = string.Empty;
             NavigationManager.NavigateTo("characters");
         }
         else
         {
-            Console.WriteLine("Erreur : " + response.ReasonPhrase);
+            error = "Le nom du personnage doit faire au minimum 3 caractères et au maximum 12 caractères.";
         }
     }
 }

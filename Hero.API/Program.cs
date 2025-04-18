@@ -1,6 +1,8 @@
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using Hero.API.Data;
 using Hero.API.Seeders;
+using Hero.Shared.Validators;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,12 +17,14 @@ builder.Services.Scan(scan => scan
             .WithScopedLifetime()
         .AddClasses(classes => classes.Where(c => c.Name.EndsWith("Repository")))
             .AsSelf()
-            .WithScopedLifetime()
-        .AddClasses(classes => classes.AssignableTo(typeof(IValidator<>)))
-        .AsImplementedInterfaces()
-        .WithScopedLifetime());
+            .WithScopedLifetime());
 
 
+builder.Services.AddFluentValidationAutoValidation()
+    .AddFluentValidationClientsideAdapters()
+    .AddValidatorsFromAssemblyContaining<CreatePlayerDtoValidator>();
+
+builder.Services.AddControllers();
 
 builder.Services.AddCors(options =>
 {

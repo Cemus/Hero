@@ -1,4 +1,5 @@
-﻿using Hero.API.Services;
+﻿using FluentValidation;
+using Hero.API.Services;
 using Hero.Shared.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +10,12 @@ namespace Hero.API.Controllers
     public class PlayerController : ControllerBase
     {
         private readonly PlayerService _playerService;
+        private readonly IValidator<CreatePlayerDto> _validator;
 
-        public PlayerController(PlayerService playerService)
+        public PlayerController(PlayerService playerService, IValidator<CreatePlayerDto> validator)
         {
             _playerService = playerService;
+            _validator = validator;
         }
 
         [HttpGet("{id}")]
@@ -49,8 +52,10 @@ namespace Hero.API.Controllers
         [HttpPost()]
         public async Task<IActionResult> Create([FromBody] CreatePlayerDto playerInfos)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            var validationResult = await _validator.ValidateAsync(playerInfos);
+            if (!validationResult.IsValid)
+                return BadRequest(validationResult.Errors);
+
             try
             {
                 PlayerDto player = await _playerService.CreatePlayerAsync(playerInfos);
