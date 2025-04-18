@@ -5,8 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Hero.API.Controllers
 {
-    [Route("api/players/")]
     [ApiController]
+    [Route("api/players/")]
+
     public class PlayerController : ControllerBase
     {
         private readonly PlayerService _playerService;

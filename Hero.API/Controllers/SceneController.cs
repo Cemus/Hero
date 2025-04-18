@@ -4,8 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Hero.API.Controllers
 {
-    [Route("api/scenes/")]
     [ApiController]
+    [Route("api/scenes/")]
+
     public class SceneController : ControllerBase
     {
         private readonly SceneService _sceneService;

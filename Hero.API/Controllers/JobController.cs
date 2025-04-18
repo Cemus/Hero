@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Hero.API.Controllers
 {
-    // A FIX
-    [Route("api/jobs/")]
     [ApiController]
+    [Route("api/jobs/")]
+
     public class JobController : ControllerBase
     {
         private readonly JobService _jobService;

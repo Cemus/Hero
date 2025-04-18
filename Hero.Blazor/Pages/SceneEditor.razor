@@ -1,38 +1,103 @@
 ﻿@page "/scene-editor"
-@using System.ComponentModel.DataAnnotations
+@inject HttpClient Http
 @using Hero.Blazor.FormModels
+@using Hero.Shared.Dtos
 
-<PageTitle>Editeur de scène</PageTitle>
+<PageTitle>Éditeur de scène</PageTitle>
 
-<h1>Les scenes</h1>
+<h1>Éditeur de scènes</h1>
 
 <EditForm Model="@sceneFormModel">
-	<div class="d-flex flex-column">
-		<label id="sceneName">Nom de la scène</label>
-		<InputText id="sceneName" @bind-Value="@sceneName"></InputText>
-	</div>
-	<div class="d-flex flex-column">
-		<label id="sceneDescription">Description de la scène</label>
-		<InputTextArea id="sceneDescription" @bind-Value="@sceneDescription"></InputTextArea>
+	<div class="d-flex flex-column mb-3">
+		<label for="sceneName">Nom de la scène</label>
+		<InputText id="sceneName" class="form-control" @bind-Value="sceneFormModel.Name" />
 	</div>
 
-	<div class="d-flex flex-column">
-		<label id="choices">Choix</label>
-		<InputSelect id="choices" @bind-Value="@sceneChoice">
-		@foreach (var choice in sceneChoices)
-		{
-			<option value="choice">@choice</option>
-		}
-		</InputSelect>
-
+	<div class="d-flex flex-column mb-3">
+		<label for="sceneDescription">Description de la scène</label>
+		<InputTextArea id="sceneDescription" class="form-control" @bind-Value="sceneFormModel.Description" />
 	</div>
 
+	<button type="button" class="btn btn-primary mb-3" @onclick="AddChoice">Ajouter un choix</button>
+
+	@foreach (var (choice, index) in sceneChoices.Select((val, i) => (val, i)))
+	{
+		<div class="border rounded p-3 mb-3">
+			<div class="d-flex flex-column mb-2">
+				<label>Type de choix</label>
+				<InputSelect class="form-select" @bind-Value="choice.Type">
+					@foreach (var type in choiceTypes)
+					{
+						<option value="@type">@type</option>
+					}
+				</InputSelect>
+			</div>
+
+			@if (choice.Type == "Changer de scène")
+			{
+				<div class="d-flex flex-column mb-2">
+					<label>Scène cible</label>
+					<InputSelect class="form-select" @bind-Value="choice.TargetSceneId">
+						@foreach (var scene in availableScenes)
+						{
+							<option value="@scene.Id">@scene.Name</option>
+						}
+					</InputSelect>
+				</div>
+			}
+
+			@if (choice.Type == "Trésor")
+			{
+				<div class="d-flex flex-column mb-2">
+					<label>Objet</label>
+					<InputSelect class="form-select" @bind-Value="choice.TargetItemId">
+						@foreach (var item in availableItems)
+						{
+							<option value="@item.Id">@item.Name</option>
+						}
+					</InputSelect>
+				</div>
+			}
+
+			<button type="button" class="btn btn-danger mt-2" @onclick="() => RemoveChoice(index)">Supprimer ce choix</button>
+		</div>
+	}
 </EditForm>
 
 @code {
-	SceneFormModel sceneFormModel = new();
-	string sceneName = string.Empty;
-	string sceneDescription = string.Empty;
-	List<string> sceneChoices = ["Test", "treasure"];
-	string sceneChoice = string.Empty;
+	private SceneFormModel sceneFormModel = new();
+	private List<SceneDto> availableScenes = new();
+	private List<ItemDto> availableItems = new();
+
+	private List<string> choiceTypes = new() { "Changer de scène", "Trésor" };
+
+	private List<SceneChoice> sceneChoices = new();
+
+	protected override async Task OnInitializedAsync()
+	{
+		availableScenes = await Http.GetFromJsonAsync<List<SceneDto>>("api/scenes") ?? new();
+		availableItems = await Http.GetFromJsonAsync<List<ItemDto>>("api/items") ?? new();
+
+	}
+
+	private void AddChoice()
+	{
+		sceneChoices.Add(new SceneChoice());
+	}
+
+	private void RemoveChoice(int index)
+	{
+		if (index >= 0 && index < sceneChoices.Count)
+		{
+			sceneChoices.RemoveAt(index);
+		}
+	}
+
+	private class SceneChoice
+	{
+		public string Type { get; set; } = string.Empty;
+		public int? TargetSceneId { get; set; }
+		public int? TargetItemId { get; set; }
+	}
+
 }

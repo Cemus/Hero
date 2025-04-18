@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Hero.API.Controllers
 {
+    [ApiController]
+    [Route("api/choices/")]
+
     public class ChoiceController : ControllerBase
     {
         private readonly ChoiceService _choiceService;
@@ -14,7 +17,7 @@ namespace Hero.API.Controllers
         }
 
 
-        [HttpPost("api/choices/")]
+        [HttpPost("")]
         public async Task<IActionResult> PostChoice([FromBody] ChoiceRequestDto request)
         {
             try
