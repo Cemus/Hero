@@ -7,14 +7,39 @@
 
 <h1>Editer une scène</h1>
 
+<EditForm Model="@sceneFormModel">
+    @if (scene != null)
+    {
+        <div>
+            <label>Nom de la scène</label>
+            <InputText @bind-Value="sceneFormModel.Name" placeholder="@scene.Name" />
+        </div>
+        <div>
+            <label>Description de la scène</label>
+            <InputText @bind-Value="sceneFormModel.Description" placeholder="@scene.Description" />
+        </div>
+    }
+    else
+    {
+        <p>Chargement de la scène...</p>
+    }
+
+</EditForm>
+
 @code {
     [Parameter]
     public int Id { get; set; }
 
-    SceneDto? scene = null;
+    private SceneDto? scene = null;
+    private SceneFormModel sceneFormModel = new();
 
     protected override async Task OnInitializedAsync()
     {
         scene = await Http.GetFromJsonAsync<SceneDto>($"api/scenes/{Id}");
+        if (scene != null)
+        {
+            sceneFormModel.Name = scene.Name;
+            sceneFormModel.Description = scene.Description;
+        }
     }
 }
